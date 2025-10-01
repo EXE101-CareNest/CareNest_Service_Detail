@@ -89,10 +89,10 @@ namespace CareNest_Service_Detail.API.Controllers
                 Id = id,
                 Name = request.Name,
                 Discount = request.Discount,
-                DurationTime  = request.DurationTime,
+                DurationTime = request.DurationTime,
                 ImgUrls = request.ImgUrls,
                 IsDefault = request.IsDefault,
-                Price = request.Price,  
+                Price = request.Price,
                 ServiceCategoryId = request.ServiceCategoryId,
                 Status = request.Status
             };
@@ -109,7 +109,7 @@ namespace CareNest_Service_Detail.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            await _dispatcher.DispatchAsyncc(new DeleteCommand { Id = id });
+            await _dispatcher.DispatchAsync(new DeleteCommand { Id = id });
             return this.OkResponse(MessageConstant.SuccessDelete);
         }
     }

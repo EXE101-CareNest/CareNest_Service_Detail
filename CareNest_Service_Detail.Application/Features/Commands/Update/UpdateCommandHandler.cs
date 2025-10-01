@@ -1,6 +1,7 @@
 ﻿using CareNest_Service_Detail.Application.Exceptions;
 using CareNest_Service_Detail.Application.Exceptions.Validators;
 using CareNest_Service_Detail.Application.Interfaces.CQRS.Commands;
+using CareNest_Service_Detail.Application.Interfaces.Services;
 using CareNest_Service_Detail.Application.Interfaces.UOW;
 using CareNest_Service_Detail.Domain.Commons.Constant;
 using CareNest_Service_Detail.Domain.Entitites;
@@ -11,10 +12,12 @@ namespace CareNest_Service_Detail.Application.Features.Commands.Update
     public class UpdateCommandHandler : ICommandHandler<UpdateCommand, Service_Detail>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IServiceCategoryService _service;
 
-        public UpdateCommandHandler(IUnitOfWork unitOfWork)
+        public UpdateCommandHandler(IUnitOfWork unitOfWork, IServiceCategoryService service)
         {
             _unitOfWork = unitOfWork;
+            _service = service;
         }
 
         public async Task<Service_Detail> HandleAsync(UpdateCommand command)
@@ -33,7 +36,9 @@ namespace CareNest_Service_Detail.Application.Features.Commands.Update
             serviceDetail.Discount = command.Discount;
             serviceDetail.DurationTime = command.DurationTime;
             serviceDetail.Price = command.Price;
-            serviceDetail.ServiceCategoryId = command.ServiceCategoryId;
+            //kiểm tra service category tồn tại
+            var serviceCategory = await _service.GetServiceCategoryById(command.ServiceCategoryId);
+            serviceDetail.ServiceCategoryId = serviceCategory.Data!.Data!.Id;
 
             serviceDetail.UpdatedAt = TimeHelper.GetUtcNow();
 

@@ -1,0 +1,19 @@
+services:
+  servicedetailapi:
+    image: service-detail-api-dev:latest
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8020:8080"
+    container_name: service-detail-api-dev
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      carenest-network:
+        ipv4_address: 192.168.0.23
+
+networks:
+  carenest-network:
+    external: true

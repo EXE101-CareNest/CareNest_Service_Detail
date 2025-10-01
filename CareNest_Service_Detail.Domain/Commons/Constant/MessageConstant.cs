@@ -12,6 +12,7 @@
         public const string SuccessDelete = "Deleted successfully.";
         public const string DuplicateRecord = "A record with the same key already exists.";
         public const string ValidationFailed = "Data validation failed.";
+        public const string BadRequest = "Bad request";
         public const string OperationFailed = "The operation could not be completed.";
         //name
         public const string MissingName = "Name must not be empty or null.";

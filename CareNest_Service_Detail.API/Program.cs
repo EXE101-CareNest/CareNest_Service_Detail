@@ -2,6 +2,7 @@
 using CareNest.Infrastructure.UOW;
 using CareNest_Service_Detail.API.Middleware;
 using CareNest_Service_Detail.Application.Common;
+using CareNest_Service_Detail.Application.Common.Options;
 using CareNest_Service_Detail.Application.Features.Commands.Create;
 using CareNest_Service_Detail.Application.Features.Commands.Delete;
 using CareNest_Service_Detail.Application.Features.Commands.Update;
@@ -18,6 +19,7 @@ using CareNest_Service_Detail.Domain.Repositories;
 using CareNest_Service_Detail.Infrastructure.Persistences.Configuration;
 using CareNest_Service_Detail.Infrastructure.Persistences.Database;
 using CareNest_Service_Detail.Infrastructure.Persistences.Repository;
+using CareNest_Service_Detail.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -117,11 +119,16 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
         });
 });
-
+// Đăng ký cấu hình APIServiceOption
+builder.Services.Configure<APIServiceOption>(
+    builder.Configuration.GetSection("APIService")
+);
 
 //Đăng ký lấy thông tin từ token
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
+builder.Services.AddScoped<IAPIService, APIService>();
+builder.Services.AddScoped<IServiceCategoryService, ServiceCategoryService>();
 //Đăng ký HttpClient
 //builder.Services.AddHttpClient<IAccountService, AccountService>(client =>
 //{
@@ -137,10 +144,10 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 //    .HandleTransientHttpError()
 //    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(2)));
 
-//builder.Services.Configure<RouteOptions>(options =>
-//{
-//    options.LowercaseUrls = true;
-//});
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+});
 
 //builder.Services.AddSwaggerGen(c =>
 //{
@@ -217,6 +224,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+    context.Database.Migrate();
 }
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
