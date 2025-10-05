@@ -17,7 +17,7 @@ namespace CareNest_Service_Detail.Application.Exceptions.Validators
             ValidatePrice(command.Price);
             ValidateDiscount(command.Discount);
             ValidateDuration(command.DurationTime);
-            ValidateServiceCategoryId(command.ServiceCategoryId);
+            ValidateServiceCategoryId(command.ServiceId);
         }
         /// <summary>
         /// kiểm tra cập nhật dịch vụ
@@ -29,7 +29,7 @@ namespace CareNest_Service_Detail.Application.Exceptions.Validators
             ValidatePrice(command.Price);
             ValidateDiscount(command.Discount);
             ValidateDuration(command.DurationTime);
-            ValidateServiceCategoryId(command.ServiceCategoryId);
+            ValidateServiceCategoryId(command.ServiceId);
         }
         /// <summary>
         /// Valiđ tên dịch vụ

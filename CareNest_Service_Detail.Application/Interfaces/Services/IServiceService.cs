@@ -3,8 +3,8 @@ using Shared.Constants;
 
 namespace CareNest_Service_Detail.Application.Interfaces.Services
 {
-    public interface IServiceCategoryService
+    public interface IServiceService
     {
-        Task<ResponseResult<ServiceCategoryResponse>> GetServiceCategoryById(string? id);
+        Task<ResponseResult<ServiceResponse>> GetById(string? id);
     }
 }

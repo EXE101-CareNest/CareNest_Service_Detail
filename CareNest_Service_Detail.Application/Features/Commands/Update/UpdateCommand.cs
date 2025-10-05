@@ -9,7 +9,7 @@ namespace CareNest_Service_Detail.Application.Features.Commands.Update
         /// <summary>
         /// Id của loại dịch vụ (category)
         /// </summary>
-        public string? ServiceCategoryId { get; set; }
+        public string? ServiceId { get; set; }
         /// <summary>
         /// tên chi tiết
         /// </summary>

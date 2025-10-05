@@ -35,14 +35,16 @@ namespace CareNest_Service_Detail.API.Controllers
             [FromQuery] int pageIndex = 1,
             [FromQuery] int pageSize = 10,
             [FromQuery] string? sortColumn = null,
-            [FromQuery] string? sortDirection = "asc")
+            [FromQuery] string? sortDirection = "asc",
+            [FromQuery] string? serviceId = null)
         {
             var query = new GetAllPagingQuery()
             {
                 Index = pageIndex,
                 PageSize = pageSize,
                 SortColumn = sortColumn,
-                SortDirection = sortDirection
+                SortDirection = sortDirection,
+                ServiceId = serviceId
             };
             var result = await _dispatcher.DispatchQueryAsync<GetAllPagingQuery, PageResult<ServiceDetailResponse>>(query);
             return this.OkResponse(result, MessageConstant.SuccessGet);
@@ -93,7 +95,7 @@ namespace CareNest_Service_Detail.API.Controllers
                 ImgUrls = request.ImgUrls,
                 IsDefault = request.IsDefault,
                 Price = request.Price,
-                ServiceCategoryId = request.ServiceCategoryId,
+                ServiceId = request.ServiceId,
                 Status = request.Status
             };
             Service_Detail result = await _dispatcher.DispatchAsync<UpdateCommand, Service_Detail>(command);

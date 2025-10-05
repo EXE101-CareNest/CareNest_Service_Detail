@@ -20,8 +20,13 @@ namespace CareNest_Service_Detail.Application.Features.Queries.GetAllPaging
 
             var orderByFunc = GetOrderByFunc(query.SortColumn, query.SortDirection);
 
+            System.Linq.Expressions.Expression<Func<Service_Detail, bool>>? predicate = null;
+            if (!string.IsNullOrWhiteSpace(query.ServiceId))
+            {
+                predicate = s => s.ServiceId == query.ServiceId;
+            }
             IEnumerable<ServiceDetailResponse> a = await _unitOfWork.GetRepository<Service_Detail>().FindAsync(
-                predicate: null,
+                predicate: predicate,
                 orderBy: orderByFunc,
                 selector: selector,
                 pageSize: query.PageSize,

@@ -2,7 +2,7 @@
 {
     public class APIServiceOption
     {
-        public string BaseUrlServiceCategory { get; set; } = string.Empty;
+        public string BaseUrlService { get; set; } = string.Empty;
     }
 }
 

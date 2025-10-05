@@ -57,7 +57,7 @@ namespace CareNest_Service_Detail.Infrastructure.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ServiceCategoryId")
+                    b.Property<string>("ServiceId")
                         .HasColumnType("text");
 
                     b.Property<bool>("Status")

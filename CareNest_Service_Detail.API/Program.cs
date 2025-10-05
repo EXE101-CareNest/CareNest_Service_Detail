@@ -128,7 +128,7 @@ builder.Services.Configure<APIServiceOption>(
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IAPIService, APIService>();
-builder.Services.AddScoped<IServiceCategoryService, ServiceCategoryService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 //Đăng ký HttpClient
 //builder.Services.AddHttpClient<IAccountService, AccountService>(client =>
 //{

@@ -12,9 +12,9 @@ namespace CareNest_Service_Detail.Application.Features.Commands.Update
     public class UpdateCommandHandler : ICommandHandler<UpdateCommand, Service_Detail>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IServiceCategoryService _service;
+        private readonly IServiceService _service;
 
-        public UpdateCommandHandler(IUnitOfWork unitOfWork, IServiceCategoryService service)
+        public UpdateCommandHandler(IUnitOfWork unitOfWork, IServiceService service)
         {
             _unitOfWork = unitOfWork;
             _service = service;
@@ -37,8 +37,8 @@ namespace CareNest_Service_Detail.Application.Features.Commands.Update
             serviceDetail.DurationTime = command.DurationTime;
             serviceDetail.Price = command.Price;
             //kiểm tra service category tồn tại
-            var serviceCategory = await _service.GetServiceCategoryById(command.ServiceCategoryId);
-            serviceDetail.ServiceCategoryId = serviceCategory.Data!.Data!.Id;
+            var service = await _service.GetById(command.ServiceId);
+            serviceDetail.ServiceId = service.Data!.Data!.Id;
 
             serviceDetail.UpdatedAt = TimeHelper.GetUtcNow();
 
