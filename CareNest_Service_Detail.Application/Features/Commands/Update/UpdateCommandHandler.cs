@@ -23,7 +23,7 @@ namespace CareNest_Service_Detail.Application.Features.Commands.Update
         public async Task<Service_Detail> HandleAsync(UpdateCommand command)
         {
             // Gọi validator để kiểm tra dữ liệu
-            Validate.ValidateUpdate(command);
+            //Validate.ValidateUpdate(command);
 
             // Tìm để cập nhật
             Service_Detail? serviceDetail = await _unitOfWork.GetRepository<Service_Detail>().GetByIdAsync(command.Id)
