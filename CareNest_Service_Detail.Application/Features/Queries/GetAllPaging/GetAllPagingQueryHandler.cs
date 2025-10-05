@@ -32,7 +32,7 @@ namespace CareNest_Service_Detail.Application.Features.Queries.GetAllPaging
                 pageSize: query.PageSize,
                 pageIndex: query.Index);
 
-            return new PageResult<ServiceDetailResponse>(a, 1, query.PageSize, query.Index);
+            return new PageResult<ServiceDetailResponse>(a, 1, query.Index, query.PageSize);
         }
 
 
