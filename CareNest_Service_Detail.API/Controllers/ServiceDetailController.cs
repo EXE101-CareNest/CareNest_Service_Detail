@@ -6,6 +6,7 @@ using CareNest_Service_Detail.Application.Features.Commands.Update;
 using CareNest_Service_Detail.Application.Features.Queries.GetAllPaging;
 using CareNest_Service_Detail.Application.Features.Queries.GetById;
 using CareNest_Service_Detail.Application.Interfaces.CQRS;
+using CareNest_Service_Detail.Application.Features.Queries.GetById;
 using CareNest_Service_Detail.Domain.Commons.Constant;
 using CareNest_Service_Detail.Domain.Entitites;
 using Microsoft.AspNetCore.Mvc;
@@ -59,7 +60,7 @@ namespace CareNest_Service_Detail.API.Controllers
         public async Task<IActionResult> GetById(string id)
         {
             var query = new GetByIdQuery() { Id = id };
-            Service_Detail result = await _dispatcher.DispatchQueryAsync<GetByIdQuery, Service_Detail>(query);
+            ServiceDetailByIdResponse result = await _dispatcher.DispatchQueryAsync<GetByIdQuery, ServiceDetailByIdResponse>(query);
             return this.OkResponse(result, MessageConstant.SuccessGet);
         }
 

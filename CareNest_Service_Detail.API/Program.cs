@@ -96,7 +96,7 @@ builder.Services.AddScoped<ICommandHandler<UpdateCommand, Service_Detail>, Updat
 builder.Services.AddScoped<ICommandHandler<DeleteCommand>, DeleteCommandHandler>();
 //query
 builder.Services.AddScoped<IQueryHandler<GetAllPagingQuery, PageResult<ServiceDetailResponse>>, GetAllPagingQueryHandler>();
-builder.Services.AddScoped<IQueryHandler<GetByIdQuery, Service_Detail>, GetByIdQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetByIdQuery, ServiceDetailByIdResponse>, GetByIdQueryHandler>();
 
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings")
