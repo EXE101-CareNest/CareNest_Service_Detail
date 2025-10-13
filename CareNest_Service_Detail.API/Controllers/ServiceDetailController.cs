@@ -65,6 +65,21 @@ namespace CareNest_Service_Detail.API.Controllers
         }
 
         /// <summary>
+        /// Lấy nhiều Service Detail theo danh sách Ids (tối đa 1000) với projection tuỳ chọn.
+        /// </summary>
+        [HttpPost("by-ids")]
+        public async Task<IActionResult> GetByIds([FromBody] GetByIdsRequest request)
+        {
+            var query = new GetByIdsQuery
+            {
+                Ids = request.Ids,
+                Fields = request.Fields
+            };
+            GetByIdsResponse result = await _dispatcher.DispatchQueryAsync<GetByIdsQuery, GetByIdsResponse>(query);
+            return this.OkResponse(result, MessageConstant.SuccessGet);
+        }
+
+        /// <summary>
         /// tạo mới dịch vụ
         /// </summary>
         /// <param name="command">thông tin dịch vụ</param>
