@@ -40,11 +40,18 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowCredentials());
 });
-// Lấy DatabaseSettings từ configuration
-DatabaseSettings dbSettings = builder.Configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>()!;
+// Lấy DatabaseSettings từ ENV/cloud phù hợp chuẩn Koyeb, ưu tiên ENV trước (cloud), chỉ fallback sang appsettings nếu chạy local/dev
+var config = builder.Configuration;
+DatabaseSettings dbSettings = new DatabaseSettings
+{
+    Ip       = config["DB_HOST"] ?? config["DatabaseSettings:Ip"],
+    Port     = int.TryParse(config["DB_PORT"], out var port) ? port : (config.GetSection("DatabaseSettings").GetValue<int?>("Port") ?? 5432),
+    User     = config["DB_USER"] ?? config["DatabaseSettings:User"],
+    Password = config["DB_PASSWORD"] ?? config["DatabaseSettings:Password"],
+    Database = config["DB_NAME"] ?? config["DatabaseSettings:Database"]
+};
 dbSettings.Display();
-string connectionString = dbSettings?.GetConnectionString()
-                        ?? "Host=localhost;Port=5432;Database=service-detail-dev;Username=exe-carenest-dev;Password=nghi123";
+string connectionString = dbSettings.GetConnectionString();
 
 
 // Đăng ký DbContext với PostgreSQL
@@ -136,15 +143,22 @@ builder.Services.AddScoped<IUseCaseDispatcher, UseCaseDispatcher>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Bật Swagger cả ở cloud nếu cấu hình cho phép (dựa vào env/config)
+var swaggerEnabled = app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("Swagger:Enabled");
+if (swaggerEnabled)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// Tích hợp migrate chỉ khi RUN_MIGRATIONS=true (cloud mới migrate; tránh scaling nhầm!)
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-    context.Database.Migrate();
+    var runMigrations = Environment.GetEnvironmentVariable("RUN_MIGRATIONS");
+    if (!string.IsNullOrWhiteSpace(runMigrations) && runMigrations.Equals("true", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Database.Migrate();
+    }
 }
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
